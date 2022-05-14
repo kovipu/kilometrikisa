@@ -11,11 +11,6 @@ type Activity = {
   distance: number;
 }
 
-type Datapoint = {
-  date: string;
-  total_distance: number;
-}
-
 export const get: RequestHandler = async ({ request }) => {
   const cookies = request.headers.get('cookie');
 
@@ -40,12 +35,15 @@ export const get: RequestHandler = async ({ request }) => {
   const activities: Activity[] = await strava.athlete.listActivities({ access_token, after, per_page: 200 })
   const sortedActivities = sortBy(a => a.start_date_local, activities)
 
-  const dataPoints = sortedActivities.reduce<Datapoint[]>((acc, activity) => {
+  const cumulativeData = sortedActivities.reduce<CumulativeDataPoint[]>((acc, activity) => {
     const previousDistance = acc[acc.length - 1]?.total_distance || 0;
+
+    // Convert to whole numbers to avoid floating point errors
+    const total_distance = ((previousDistance * 100) + (activity.distance * 100)) / 100
 
     acc.push({
       date: activity.start_date_local,
-      total_distance: previousDistance + activity.distance
+      total_distance
     })
 
     return acc;
@@ -53,6 +51,8 @@ export const get: RequestHandler = async ({ request }) => {
 
   return {
     status: 200,
-    body: dataPoints
+    body: {
+      cumulativeData
+    }
   }
 }

@@ -8,3 +8,8 @@ declare namespace App {
 	// interface Session {}
 	// interface Stuff {}
 }
+
+type CumulativeDataPoint = {
+	date: string;
+	total_distance: number;
+};
