@@ -19,6 +19,6 @@
 
 <h1>Kilometrikisa statsit</h1>
 
-<CumulativeDistance data={cumulativeData} />
+<CumulativeDistance rawData={cumulativeData} />
 
 <a href={loginUri}>Authenticate Strava</a>
