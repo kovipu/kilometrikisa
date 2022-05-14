@@ -2,8 +2,19 @@ import type { RequestHandler } from "@sveltejs/kit";
 import strava from "strava-v3";
 import dotenv from 'dotenv';
 import cookie from 'cookie';
+import { sortBy } from 'ramda';
 
 dotenv.config()
+
+type Activity = {
+  start_date_local: string;
+  distance: number;
+}
+
+type Datapoint = {
+  date: string;
+  total_distance: number;
+}
 
 export const get: RequestHandler = async ({ request }) => {
   const cookies = request.headers.get('cookie');
@@ -26,9 +37,22 @@ export const get: RequestHandler = async ({ request }) => {
 
   const after = Date.parse("2022-05-01T00:00:00Z") / 1000;
 
-  const activities = await strava.athlete.listActivities({ access_token, after, per_page: 200 })
+  const activities: Activity[] = await strava.athlete.listActivities({ access_token, after, per_page: 200 })
+  const sortedActivities = sortBy(a => a.start_date_local, activities)
+
+  const dataPoints = sortedActivities.reduce<Datapoint[]>((acc, activity) => {
+    const previousDistance = acc[acc.length - 1]?.total_distance || 0;
+
+    acc.push({
+      date: activity.start_date_local,
+      total_distance: previousDistance + activity.distance
+    })
+
+    return acc;
+  }, [])
 
   return {
-    body: activities
+    status: 200,
+    body: dataPoints
   }
 }

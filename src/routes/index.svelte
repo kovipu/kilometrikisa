@@ -8,12 +8,10 @@ const scope = "activity:read";
 const loginUri = `https://www.strava.com/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope}&response_type=code`;
 
 let activities;
-console.log(activities)
 
 onMount(async () => {
   const response = await fetch('/strava/get-activities')
   activities = await response.json();
-  console.log(activities)
 })
 </script>
 
