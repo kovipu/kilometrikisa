@@ -1,2 +1,9 @@
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
+<script lang="ts">
+const clientId = "84299";
+const redirectUri = "http://localhost:3000/strava/oauth-callback";
+const loginUri = `https://www.strava.com/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code`;
+</script>
+
+<h1>Kilometrikisa statsit</h1>
+
+<a href={loginUri}>Authenticate Strava</a>
