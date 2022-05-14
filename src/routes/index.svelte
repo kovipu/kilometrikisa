@@ -1,7 +1,20 @@
 <script lang="ts">
+import { onMount } from "svelte";
+
+
 const clientId = "84299";
 const redirectUri = "http://localhost:3000/strava/oauth-callback";
-const loginUri = `https://www.strava.com/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code`;
+const scope = "activity:read";
+const loginUri = `https://www.strava.com/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope}&response_type=code`;
+
+let activities;
+console.log(activities)
+
+onMount(async () => {
+  const response = await fetch('/strava/get-activities')
+  activities = await response.json();
+  console.log(activities)
+})
 </script>
 
 <h1>Kilometrikisa statsit</h1>
