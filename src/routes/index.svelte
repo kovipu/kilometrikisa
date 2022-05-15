@@ -35,7 +35,8 @@
 <style>
 	.chart-container {
 		width: 100%;
-		height: 400px;
+		height: 32rem;
+		margin-bottom: 2rem;
 		display: flex;
 		justify-content: center;
 		align-items: center;

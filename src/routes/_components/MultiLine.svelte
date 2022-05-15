@@ -8,9 +8,9 @@
 </script>
 
 <g class="line-group">
-  {#each $data as group}
-	  <path class="path-line" d='{path(group.values)}' stroke='black' />
-  {/each}
+	{#each $data as group}
+		<path class="path-line" d={path(group.values)} stroke="black" />
+	{/each}
 </g>
 
 <style>
