@@ -20,7 +20,7 @@
 	{/each}
 </div>
 
-<style>
+<style lang="scss">
 	.legend {
 		width: 100%;
 		padding: 0.5rem;
@@ -28,10 +28,15 @@
 		display: flex;
 		flex-direction: row-reverse;
 		justify-content: center;
-	}
 
-	.legend-item {
-		padding: 0.5rem;
+		> .legend-item {
+			padding: 0.5rem;
+			font-size: 0.9rem;
+
+			@media screen and (min-width: 768px) {
+				font-size: 1rem;
+			}
+		}
 	}
 
 	em {

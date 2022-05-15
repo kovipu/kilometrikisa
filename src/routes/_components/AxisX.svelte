@@ -20,6 +20,11 @@
 <style lang="scss">
 	.tick {
 		font-weight: 600;
-		fill: #C0CDD6;
+		fill: #c0cdd6;
+		font-size: 0.9rem;
+
+		@media screen and (min-width: 768px) {
+			font-size: 1rem;
+		}
 	}
 </style>
