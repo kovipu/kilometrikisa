@@ -3,6 +3,7 @@ import strava from 'strava-v3';
 import dotenv from 'dotenv';
 import cookie from 'cookie';
 import { sortBy } from 'ramda';
+import { eachDayOfInterval } from 'date-fns';
 
 dotenv.config();
 
@@ -10,6 +11,9 @@ type Activity = {
 	start_date_local: string;
 	distance: number;
 };
+
+const startDate = new Date('2022-05-01');
+const endDate = new Date('2022-08-31');
 
 export const get: RequestHandler = async ({ request }) => {
 	const cookies = request.headers.get('cookie');
@@ -30,7 +34,7 @@ export const get: RequestHandler = async ({ request }) => {
 		};
 	}
 
-	const after = Date.parse('2022-05-01T00:00:00Z') / 1000;
+	const after = startDate.getTime() / 1000;
 
 	const activities: Activity[] = await strava.athlete.listActivities({
 		access_token,
@@ -46,17 +50,55 @@ export const get: RequestHandler = async ({ request }) => {
 		const total_distance = (previousDistance * 100 + activity.distance * 100) / 100;
 
 		acc.push({
-			date: activity.start_date_local,
+			date: Date.parse(activity.start_date_local),
 			total_distance
 		});
 
 		return acc;
 	}, []);
 
+	const target1000km = buildTargetData(1000 * 1000);
+	const target1500km = buildTargetData(1500 * 1000);
+
+	const data: CumulativeData[] = [
+		{
+			name: '1000km',
+			color: '#00bcd4',
+			values: target1000km
+		},
+		{
+			name: '1500km',
+			color: '#ff9800',
+			values: target1500km
+		},
+		{
+			name: 'Konsta',
+			color: '#f44336',
+			values: cumulativeData
+		}
+	];
+
+	const flatData = cumulativeData.concat(target1000km, target1500km);
+
 	return {
 		status: 200,
 		body: {
-			cumulativeData
+			data,
+			flatData
 		}
 	};
+};
+
+const buildTargetData = (target: number): CumulativeDataPoint[] => {
+	// build
+	const days = eachDayOfInterval({ start: startDate, end: endDate });
+
+	return days.map((day, i) => {
+		const total_distance = target * ((i + 1) / days.length);
+
+		return {
+			date: day.getTime(),
+			total_distance
+		};
+	});
 };

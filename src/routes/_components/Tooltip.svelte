@@ -20,9 +20,7 @@
 	$: findValue = (values: CumulativeDataPoint[]) =>
 		reverse(values).find((d: CumulativeDataPoint) => $x(d) < closestDate);
 
-  const formatDistance = (distance: number): string => {
-    return `${(distance / 1000).toFixed(1)} km`;
-  };
+	const formatDistance = (distance: number): string => `${(distance / 1000).toFixed(1)} km`;
 </script>
 
 <div

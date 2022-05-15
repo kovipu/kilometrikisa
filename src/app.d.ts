@@ -10,6 +10,12 @@ declare namespace App {
 }
 
 type CumulativeDataPoint = {
-	date: string;
+	date: number;
 	total_distance: number;
+};
+
+type CumulativeData = {
+	name: string;
+	color: string;
+	values: CumulativeDataPoint[];
 };

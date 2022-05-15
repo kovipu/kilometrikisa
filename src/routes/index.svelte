@@ -6,13 +6,15 @@
 	import StravaLink from './_components/StravaLink.svelte';
 
 	let loading = true;
-	let cumulativeData: CumulativeDataPoint[];
+	let data: CumulativeData[];
+	let flatData: CumulativeDataPoint[];
 
 	onMount(async () => {
 		const response = await fetch('/strava/get-activities');
-		const data: { cumulativeData: CumulativeDataPoint[] } = await response.json();
+		const json: { data: CumulativeData[]; flatData: CumulativeDataPoint[] } = await response.json();
 		loading = false;
-		cumulativeData = data.cumulativeData;
+		data = json.data;
+		flatData = json.flatData;
 	});
 </script>
 
@@ -28,7 +30,7 @@
 		{#if loading}
 			<Loading />
 		{:else}
-			<CumulativeDistance rawData={cumulativeData} />
+			<CumulativeDistance {data} {flatData} />
 		{/if}
 	</div>
 </div>
