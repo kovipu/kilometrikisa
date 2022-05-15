@@ -3,11 +3,7 @@
 	import Loading from './_components/Loading.svelte';
 
 	import { onMount } from 'svelte';
-
-	const clientId = '84299';
-	const redirectUri = 'http://localhost:3000/strava/oauth-callback';
-	const scope = 'activity:read';
-	const loginUri = `https://www.strava.com/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope}&response_type=code`;
+	import StravaLink from './_components/StravaLink.svelte';
 
 	let loading = true;
 	let cumulativeData: CumulativeDataPoint[];
@@ -23,7 +19,7 @@
 <div class="hero">
 	<header>
 		<h1>Kilometrikisa</h1>
-		<a href={loginUri}>Strava tunnistautuminen</a>
+		<StravaLink />
 	</header>
 
 	<div class="chart-container">
@@ -38,7 +34,7 @@
 <style lang="scss">
 	.hero {
 		background-color: #f8fafb;
-		padding-bottom: 1rem;
+		padding-bottom: 3rem;
 
 		> header {
 			display: flex;
@@ -50,16 +46,6 @@
 
 			> h1 {
 				font-size: 1.4rem;
-				color: '';
-			}
-
-			> a {
-				text-decoration: none;
-				color: #0042cc;
-
-				&:hover {
-					text-decoration: underline;
-				}
 			}
 		}
 	}

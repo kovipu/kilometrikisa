@@ -17,9 +17,9 @@
 	{/each}
 </g>
 
-<style>
+<style lang="scss">
 	.tick {
-		font-size: 0.725rem;
-		font-weight: 200;
+		font-weight: 600;
+		fill: #C0CDD6;
 	}
 </style>
