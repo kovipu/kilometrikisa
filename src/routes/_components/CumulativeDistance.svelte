@@ -32,17 +32,8 @@
 	$: flatData = dataFormatted.concat(target1500);
 </script>
 
-<div class="chart-container">
-	<LayerCake x={xKey} y={yKey} z={zKey} yDomain={[0, 1500 * 1000]} {data} {flatData}>
-		<Svg>
-			<Multiline />
-		</Svg>
-	</LayerCake>
-</div>
-
-<style>
-	.chart-container {
-		width: 100%;
-		height: 400px;
-	}
-</style>
+<LayerCake x={xKey} y={yKey} z={zKey} yDomain={[0, 1500 * 1000]} {data} {flatData}>
+	<Svg>
+		<Multiline />
+	</Svg>
+</LayerCake>

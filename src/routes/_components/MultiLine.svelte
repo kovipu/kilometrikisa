@@ -1,26 +1,16 @@
 <script lang="ts">
 	import { getContext } from 'svelte';
 
-	const { data, xGet, yGet, zGet } = getContext('LayerCake');
+	const { data, xGet, yGet } = getContext('LayerCake');
 
-	$: console.log({ $data });
-
-	$: path = (values: CumulativeDataPoint[]): string => {
-		return (
-			'M' +
-			values
-				.map((d: CumulativeDataPoint) => {
-					return $xGet(d) + ',' + $yGet(d);
-				})
-				.join('L')
-		);
-	};
+	$: path = (values: CumulativeDataPoint[]) =>
+		'M' + values.map((d) => $xGet(d) + ',' + $yGet(d)).join('L');
 </script>
 
-<g>
-	{#each $data as group}
-		<path class="path-line" d={path(group.values)} stroke={zGet(group)} />
-	{/each}
+<g class="line-group">
+  {#each $data as group}
+	  <path class="path-line" d='{path(group.values)}' stroke='black' />
+  {/each}
 </g>
 
 <style>
@@ -28,6 +18,6 @@
 		fill: none;
 		stroke-linejoin: round;
 		stroke-linecap: round;
-		stroke-width: 2;
+		stroke-width: 3px;
 	}
 </style>
