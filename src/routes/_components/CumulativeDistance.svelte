@@ -5,7 +5,7 @@
 	import { eachDayOfInterval } from 'date-fns';
 	import Legend from './Legend.svelte';
 	import Tooltip from './Tooltip.svelte';
-import AxisY from './AxisY.svelte';
+	import AxisY from './AxisY.svelte';
 
 	export let data: CumulativeData[] = [];
 	export let flatData: CumulativeDataPoint[] = [];

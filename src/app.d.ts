@@ -19,3 +19,26 @@ type CumulativeData = {
 	color: string;
 	values: CumulativeDataPoint[];
 };
+
+type Activity = {
+	name: string;
+	start_date: string;
+	start_date_local: string;
+	distance: number;
+	moving_time: number;
+	elapsed_time: number;
+	total_elevation_gain: number;
+	average_speed: number;
+	max_speed: number;
+	upload_id: number;
+};
+
+type AggregatedActivity = {
+	name: string;
+	date: number;
+	distance: number;
+	elapsed_time: number;
+	average_speed: number;
+	max_speed: number;
+	total_distance: number;
+};

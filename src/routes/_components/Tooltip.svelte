@@ -31,7 +31,7 @@
 />
 
 {#if closestDate}
-  <div class="line" style="left: {left}px;"></div>
+	<div class="line" style="left: {left}px;" />
 	<div
 		class="tooltip"
 		style="
@@ -62,28 +62,28 @@
 		position: absolute;
 		top: 0;
 		background: rgba(255, 255, 255, 0.8);
-    border: 1px solid #ccc;
-    color: #444;
+		border: 1px solid #ccc;
+		color: #444;
 		transform: translate(-50%);
 		padding: 0.3rem;
-    font-size: 0.9rem;
+		font-size: 0.9rem;
 
-    @media screen and (min-width: 768px) {
-      font-size: 1rem;
-    }
+		@media screen and (min-width: 768px) {
+			font-size: 1rem;
+		}
 
-	  em {
-      color: #000;
+		em {
+			color: #000;
 			font-weight: bold;
 		}
 	}
 
-  .line {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    width: 1px;
-    border-left: 1px dotted black;
-    pointer-events: none;
-  }
+	.line {
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		width: 1px;
+		border-left: 1px dotted black;
+		pointer-events: none;
+	}
 </style>

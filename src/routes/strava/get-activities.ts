@@ -7,11 +7,6 @@ import { eachDayOfInterval } from 'date-fns';
 
 dotenv.config();
 
-type Activity = {
-	start_date_local: string;
-	distance: number;
-};
-
 const startDate = new Date('2022-05-01');
 const endDate = new Date('2022-08-31');
 
@@ -43,20 +38,30 @@ export const get: RequestHandler = async ({ request }) => {
 	});
 	const sortedActivities = sortBy((a) => a.start_date_local, activities);
 
-	const cumulativeData = sortedActivities.reduce<CumulativeDataPoint[]>((acc, activity) => {
+	const cumulativeData = sortedActivities.reduce<AggregatedActivity[]>((acc, activity) => {
+		const { name, start_date, distance, elapsed_time, average_speed, max_speed } = activity;
 		const previousDistance = acc[acc.length - 1]?.total_distance || 0;
 
 		// Convert to whole numbers to avoid floating point errors
 		const total_distance = (previousDistance * 100 + activity.distance * 100) / 100;
 
 		acc.push({
-			date: Date.parse(activity.start_date_local),
+			name,
+			date: Date.parse(start_date),
+			distance,
+			elapsed_time,
+			average_speed,
+			max_speed,
 			total_distance
 		});
 
 		return acc;
 	}, []);
 
+	const currentValues: CumulativeDataPoint[] = cumulativeData.map(({ date, total_distance }) => ({
+		date,
+		total_distance
+	}));
 	const target1000km = buildTargetData(1000 * 1000);
 	const target1500km = buildTargetData(1500 * 1000);
 
@@ -74,17 +79,18 @@ export const get: RequestHandler = async ({ request }) => {
 		{
 			name: 'Konsta',
 			color: '#f44336',
-			values: cumulativeData
+			values: currentValues
 		}
 	];
 
-	const flatData = cumulativeData.concat(target1000km, target1500km);
+	const flatData = currentValues.concat(target1000km, target1500km);
 
 	return {
 		status: 200,
 		body: {
 			data,
-			flatData
+			flatData,
+			activities: cumulativeData
 		}
 	};
 };

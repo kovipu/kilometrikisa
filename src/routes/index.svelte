@@ -4,17 +4,24 @@
 
 	import { onMount } from 'svelte';
 	import StravaLink from './_components/StravaLink.svelte';
+	import ActivityTable from './_components/ActivityTable.svelte';
 
 	let loading = true;
 	let data: CumulativeData[];
 	let flatData: CumulativeDataPoint[];
+	let activities: AggregatedActivity[];
 
 	onMount(async () => {
 		const response = await fetch('/strava/get-activities');
-		const json: { data: CumulativeData[]; flatData: CumulativeDataPoint[] } = await response.json();
+		const json: {
+			data: CumulativeData[];
+			flatData: CumulativeDataPoint[];
+			activities: AggregatedActivity[];
+		} = await response.json();
 		loading = false;
 		data = json.data;
 		flatData = json.flatData;
+		activities = json.activities;
 	});
 </script>
 
@@ -33,6 +40,11 @@
 			<CumulativeDistance {data} {flatData} />
 		{/if}
 	</div>
+</div>
+<div class="table-container">
+	{#if !loading}
+		<ActivityTable {activities} />
+	{/if}
 </div>
 
 <style lang="scss">
@@ -62,13 +74,23 @@
 	.chart-container {
 		width: 80%;
 		height: 12rem;
-		margin: 2rem auto 2rem auto;
+		margin: 2rem auto;
 		display: flex;
 		justify-content: center;
 		align-items: center;
 
 		@media screen and (min-width: 768px) {
 			height: 32rem;
+		}
+	}
+
+	.table-container {
+		/* width: 80%; */
+		margin: 2rem auto;
+		overflow-x: auto;
+
+		@media screen and (min-width: 768px) {
+			width: 80%;
 		}
 	}
 </style>

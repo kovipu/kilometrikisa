@@ -1,27 +1,27 @@
 <script lang="ts">
-import { format } from 'date-fns';
+	import { format } from 'date-fns';
 
-  import { getContext } from 'svelte';
+	import { getContext } from 'svelte';
 
-  const { padding, xRange, yScale } = getContext('LayerCake');
+	const { padding, xRange, yScale } = getContext('LayerCake');
 
-  const ticks = 4;
-  const tickVals = $yScale.ticks(ticks);
+	const ticks = 4;
+	const tickVals = $yScale.ticks(ticks);
 
-  const formatDistance = (distance: number): string => `${(distance / 1000).toFixed()}`;
+	const formatDistance = (distance: number): string => `${(distance / 1000).toFixed()}`;
 </script>
 
 <g class="axis y-axis">
-  {#each tickVals as tick, i}
-    <g class="tick" transform="translate(-10,{$yScale(tick)})">
-      <line class="gridline" x2='100%'></line>
-      <text text-anchor="end" transform="translate(-3, 3)">{formatDistance(tick)}</text>
-    </g>
-  {/each}
+	{#each tickVals as tick, i}
+		<g class="tick" transform="translate(-10,{$yScale(tick)})">
+			<line class="gridline" x2="100%" />
+			<text text-anchor="end" transform="translate(-3, 3)">{formatDistance(tick)}</text>
+		</g>
+	{/each}
 </g>
 
 <style lang="scss">
-  .tick {
+	.tick {
 		font-weight: 600;
 		fill: #c0cdd6;
 		font-size: 0.9rem;
@@ -30,9 +30,9 @@ import { format } from 'date-fns';
 			font-size: 1rem;
 		}
 
-    > .gridline {
-      stroke-dasharray: 2;
-      stroke: #aaa;
-    }
+		> .gridline {
+			stroke-dasharray: 2;
+			stroke: #aaa;
+		}
 	}
 </style>
