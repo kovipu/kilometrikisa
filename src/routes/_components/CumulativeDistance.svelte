@@ -4,6 +4,7 @@
 	import Multiline from './Multiline.svelte';
 	import { eachDayOfInterval } from 'date-fns';
 	import Legend from './Legend.svelte';
+	import Tooltip from './Tooltip.svelte';
 
 	export let rawData: CumulativeDataPoint[] = [];
 
@@ -11,6 +12,10 @@
 	const endDate = new Date('2022-08-31T23:59:59.999Z');
 
 	const ticks = eachDayOfInterval({ start: startDate, end: endDate }, { step: 14 }).map((d) =>
+		d.getTime()
+	);
+
+	const tooltipDataset = eachDayOfInterval({ start: startDate, end: endDate }).map((d) =>
 		d.getTime()
 	);
 
@@ -69,5 +74,6 @@
 	</Svg>
 	<Html>
 		<Legend />
+		<Tooltip dataset={tooltipDataset} />
 	</Html>
 </LayerCake>

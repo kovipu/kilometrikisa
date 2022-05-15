@@ -2,8 +2,6 @@
 	import { getContext } from 'svelte';
 
 	const { data, height, padding } = getContext('LayerCake');
-
-	$: console.log($height);
 </script>
 
 <div
