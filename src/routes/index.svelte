@@ -46,7 +46,7 @@
 			padding: 0.6rem 0;
 
 			> div {
-				width: 90%;
+				width: 80%;
 				display: flex;
 				justify-content: space-between;
 				align-items: center;
@@ -60,7 +60,7 @@
 	}
 
 	.chart-container {
-		width: 90%;
+		width: 80%;
 		height: 12rem;
 		margin: 2rem auto 2rem auto;
 		display: flex;

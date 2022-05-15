@@ -66,6 +66,11 @@
     color: #444;
 		transform: translate(-50%);
 		padding: 0.3rem;
+    font-size: 0.9rem;
+
+    @media screen and (min-width: 768px) {
+      font-size: 1rem;
+    }
 
 	  em {
       color: #000;
