@@ -1,8 +1,9 @@
 <script lang="ts">
-	import { LayerCake, Svg } from 'layercake';
+	import { Html, LayerCake, Svg } from 'layercake';
 	import AxisX from './AxisX.svelte';
 	import Multiline from './Multiline.svelte';
 	import { eachDayOfInterval } from 'date-fns';
+	import Legend from './Legend.svelte';
 
 	export let rawData: CumulativeDataPoint[] = [];
 
@@ -22,6 +23,11 @@
 		{ date: endDate.getTime(), total_distance: 1500 * 1000 }
 	];
 
+	const target1000 = [
+		{ date: startDate.getTime(), total_distance: 0 },
+		{ date: endDate.getTime(), total_distance: 1000 * 1000 }
+	];
+
 	$: dataFormatted = rawData.map(({ date, total_distance }: CumulativeDataPoint) => ({
 		date: Date.parse(date),
 		total_distance: total_distance
@@ -29,12 +35,19 @@
 
 	$: data = [
 		{
-			[zKey]: 'Konsta',
-			values: dataFormatted
+			[zKey]: '1000km tavoite',
+			color: '#ccc',
+			values: target1000
 		},
 		{
-			[zKey]: '1500Km tavoite',
+			[zKey]: '1500km tavoite',
+			color: 'salmon',
 			values: target1500
+		},
+		{
+			[zKey]: 'Konsta',
+			color: '#ab00d6',
+			values: dataFormatted
 		}
 	];
 
@@ -54,4 +67,7 @@
 		<AxisX {ticks} />
 		<Multiline />
 	</Svg>
+	<Html>
+		<Legend />
+	</Html>
 </LayerCake>

@@ -9,7 +9,7 @@
 
 <g class="line-group">
 	{#each $data as group}
-		<path class="path-line" d={path(group.values)} stroke="black" />
+		<path class="path-line" d={path(group.values)} stroke={group.color} />
 	{/each}
 </g>
 
@@ -18,6 +18,6 @@
 		fill: none;
 		stroke-linejoin: round;
 		stroke-linecap: round;
-		stroke-width: 3px;
+		stroke-width: 2px;
 	}
 </style>

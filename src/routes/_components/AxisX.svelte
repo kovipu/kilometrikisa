@@ -6,7 +6,7 @@
 
 	const { padding, xScale, yRange } = getContext('LayerCake');
 
-	const formatTick = (tick: number) => format(new Date(tick), 'd.MM.');
+	const formatTick = (tick: number) => format(new Date(tick), 'd.M.');
 </script>
 
 <g class="axis x-axis" transform="translate(0, {$padding.bottom})">
