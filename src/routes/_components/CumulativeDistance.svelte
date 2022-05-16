@@ -11,7 +11,7 @@
   export let flatData: CumulativeDataPoint[] = [];
 
   const startDate = new Date('2022-05-01T00:00:00.000Z');
-  const endDate = new Date('2022-08-31T23:59:59.999Z');
+  const endDate = new Date('2022-09-22T23:59:59.999Z');
 
   const ticks = eachDayOfInterval({ start: startDate, end: endDate }, { step: 14 }).map((d) =>
     d.getTime(),

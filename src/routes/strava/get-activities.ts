@@ -8,7 +8,7 @@ import { eachDayOfInterval } from 'date-fns';
 dotenv.config();
 
 const startDate = new Date('2022-05-01');
-const endDate = new Date('2022-08-31');
+const endDate = new Date('2022-09-22');
 
 export const get: RequestHandler = async ({ request }) => {
   const cookies = request.headers.get('cookie');
