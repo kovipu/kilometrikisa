@@ -1,7 +1,7 @@
 <script lang="ts">
   import { getContext } from 'svelte';
   import { format } from 'date-fns';
-  import fi from 'date-fns/locale/fi';
+  import fi from 'date-fns/locale/fi/index.js';
 
   export let ticks: number[] = [];
 

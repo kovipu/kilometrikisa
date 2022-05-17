@@ -1,9 +1,7 @@
 <script lang="ts">
-  import { format } from 'date-fns';
-
   import { getContext } from 'svelte';
 
-  const { padding, xRange, yScale } = getContext('LayerCake');
+  const { yScale } = getContext('LayerCake');
 
   const ticks = 5;
   $: tickVals = $yScale.ticks(ticks);

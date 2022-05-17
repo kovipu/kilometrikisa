@@ -1,7 +1,7 @@
 <script lang="ts">
   import { Html, LayerCake, Svg } from 'layercake';
   import AxisX from './AxisX.svelte';
-  import Multiline from './Multiline.svelte';
+  import MultiLine from './MultiLine.svelte';
   import { eachDayOfInterval } from 'date-fns';
   import Legend from './Legend.svelte';
   import Tooltip from './Tooltip.svelte';
@@ -60,7 +60,7 @@
   <Svg>
     <AxisY />
     <AxisX {ticks} />
-    <Multiline />
+    <MultiLine />
   </Svg>
   <Html>
     <Legend />

@@ -1,10 +1,10 @@
 <script lang="ts">
   import { getContext } from 'svelte';
   import { format } from 'date-fns';
-  import fi from 'date-fns/locale/fi';
+  import fi from 'date-fns/locale/fi/index.js';
   import { reverse } from 'ramda';
 
-  const { data, xGet, y, x, xScale } = getContext('LayerCake');
+  const { data, y, x, xScale } = getContext('LayerCake');
 
   export let dataset: number[];
 
