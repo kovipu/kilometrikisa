@@ -9,6 +9,16 @@ declare namespace App {
   // interface Stuff {}
 }
 
+type AthleteSession = {
+  id: number;
+  firstname: string;
+  lastname: string;
+  access_token: string;
+  refresh_token: string;
+  profile_medium: string;
+  profile: string;
+};
+
 type CumulativeDataPoint = {
   date: number;
   total_distance: number;
