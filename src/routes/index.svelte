@@ -11,7 +11,17 @@
   let flatData: CumulativeDataPoint[] = [];
   let target: number = 1000;
 
-  const colors = ['#00bbff', '#ff7ac7', '#ffc400', '#ff3e00', '#77dd77', '#ffb347', '#ffe4b8', '#ffb3c0', '#ff00cc'];
+  const colors = [
+    '#00bbff',
+    '#ff7ac7',
+    '#ffc400',
+    '#ff3e00',
+    '#77dd77',
+    '#ffb347',
+    '#ffe4b8',
+    '#ffb3c0',
+    '#ff00cc',
+  ];
 
   onMount(async () => {
     const response = await fetch('/strava/get-activities');
@@ -36,7 +46,7 @@
     }
 
     target = newTarget;
-  }
+  };
 </script>
 
 <div class="hero">
@@ -49,9 +59,9 @@
 
   <div class="chart-container">
     {#if loading}
-    <Loading />
+      <Loading />
     {:else}
-    <CumulativeDistance {athleteData} {flatData} {target} />
+      <CumulativeDistance {athleteData} {flatData} {target} />
     {/if}
   </div>
 </div>
@@ -72,6 +82,7 @@
     <ActivityTable {athleteData} />
   {/if}
 </div>
+
 <style lang="scss">
   .hero {
     background-color: #f8fafb;
@@ -80,7 +91,7 @@
     > header {
       background-color: #fff;
       border-bottom: 1px solid #ddd;
-      padding: 0.6rem 0;
+      padding: 0.8rem 0;
 
       > div {
         width: 80%;
@@ -128,7 +139,7 @@
     }
 
     > button {
-      background-color: #00bbff;
+      background-color: #0042cc;
       color: #fff;
       padding: 0.5rem 1rem;
       border: none;
@@ -137,7 +148,7 @@
       cursor: pointer;
 
       &:hover {
-        background-color: #00a3e0;
+        background-color: #003399;
       }
     }
   }

@@ -1,8 +1,9 @@
 import type { RequestHandler } from '@sveltejs/kit';
 import strava from 'strava-v3';
 import dotenv from 'dotenv';
-import { flatten, last, pluck, sortBy, uniq } from 'ramda';
+import { flatten, last, mean, pluck, sortBy, uniqBy } from 'ramda';
 import { getAthletes, updateAthlete } from './_db';
+import { format } from 'date-fns';
 
 dotenv.config();
 
@@ -14,33 +15,44 @@ type AggregatedData = {
   totalDistance: number;
   totalRideTime: number;
   maxSpeed: number;
-}
+};
 
-export const get: RequestHandler = async ({ request }) => {
+export const get: RequestHandler = async () => {
   const athletes = getAthletes();
 
-  const athleteActivities = await Promise.all(athletes.map(athlete => getActivities(athlete)));
+  const athleteActivities = await Promise.all(athletes.map((athlete) => getActivities(athlete)));
 
   const athleteData: AthleteData[] = athleteActivities.map((activities, athleteIdx) => {
     const sortedActivities = sortBy((a) => a.start_date_local, activities);
 
-    const { aggregatedActivities, totalDistance, totalRideTime, maxSpeed } = aggregateData(sortedActivities);
+    const { aggregatedActivities, totalDistance, totalRideTime, maxSpeed } =
+      aggregateData(sortedActivities);
 
-    const totalRideDays = uniq(pluck('start_date', activities)).length;
+    const totalRideDays = uniqBy(
+      (date: string) => format(new Date(date), 'yyyy-MM-dd'),
+      pluck('start_date', activities),
+    ).length;
+    const averageRideDistance = totalDistance / aggregatedActivities.length;
+    const averageRideLength = mean(pluck('elapsedTime', aggregatedActivities));
+    const averageSpeed = mean(pluck('averageSpeed', aggregatedActivities));
+
     const activityData = {
       totalDistance,
       totalRideTime,
+      totalRideDays,
+      averageRideDistance,
+      averageRideLength,
+      averageSpeed,
       maxSpeed,
-      totalRideDays
-    }
+    };
 
     const cumulativeData: CumulativeDataPoint[] = aggregatedActivities.map(
-      ({ date, total_distance }) => ({
+      ({ date, totalDistance }) => ({
         date,
-        total_distance,
+        totalDistance,
       }),
     );
-    cumulativeData.unshift({ date: startDate.getTime(), total_distance: 0 });
+    cumulativeData.unshift({ date: startDate.getTime(), totalDistance: 0 });
 
     const { id, firstname, lastname, profile } = athletes[athleteIdx];
     return {
@@ -49,7 +61,7 @@ export const get: RequestHandler = async ({ request }) => {
       lastname,
       profile,
       cumulativeData,
-      activityData
+      activityData,
     };
   });
 
@@ -97,31 +109,34 @@ const getActivities = async ({
 };
 
 const aggregateData = (data: Activity[]): AggregatedData => {
-  return data.reduce<AggregatedData>((acc, activity) => {
-    const { name, start_date, distance, elapsed_time, average_speed, max_speed } = activity;
-    const previousDistance = last(acc.aggregatedActivities)?.totalDistance || 0;
+  return data.reduce<AggregatedData>(
+    (acc, activity) => {
+      const { name, start_date, distance, elapsed_time, average_speed, max_speed } = activity;
+      const previousDistance = last(acc.aggregatedActivities)?.totalDistance || 0;
 
-    // Convert to whole numbers to avoid floating point errors
-    const totalDistance = (previousDistance * 100 + activity.distance * 100) / 100;
+      // Convert to whole numbers to avoid floating point errors
+      const totalDistance = (previousDistance * 100 + activity.distance * 100) / 100;
 
-    acc.aggregatedActivities.push({
-      name,
-      date: Date.parse(start_date),
-      distance,
-      elapsedTime: elapsed_time,
-      averageSpeed: average_speed,
-      totalDistance,
-    });
+      acc.aggregatedActivities.push({
+        name,
+        date: Date.parse(start_date),
+        distance,
+        elapsedTime: elapsed_time,
+        averageSpeed: average_speed,
+        totalDistance,
+      });
 
-    acc.totalDistance = totalDistance;
-    acc.totalRideTime += elapsed_time;
-    acc.maxSpeed = Math.max(acc.maxSpeed, max_speed);
+      acc.totalDistance = totalDistance;
+      acc.totalRideTime += elapsed_time;
+      acc.maxSpeed = Math.max(acc.maxSpeed, max_speed);
 
-    return acc;
-  }, {
-    aggregatedActivities: [],
-    totalDistance: 0,
-    totalRideTime: 0,
-    maxSpeed: 0,
-  });
-}
+      return acc;
+    },
+    {
+      aggregatedActivities: [],
+      totalDistance: 0,
+      totalRideTime: 0,
+      maxSpeed: 0,
+    },
+  );
+};

@@ -24,10 +24,10 @@
 
   let targetData: CumulativeDataPoint[] = [];
   $: targetData = days.map((date, i) => {
-    const total_distance = 1000 * target * ((i + 1) / days.length);
+    const totalDistance = 1000 * target * ((i + 1) / days.length);
     return {
       date,
-      total_distance,
+      totalDistance,
     };
   });
 
@@ -41,7 +41,7 @@
   $: flatDataWithTarget = targetData.concat(flatData);
 
   const xKey = 'date';
-  const yKey = 'total_distance';
+  const yKey = 'totalDistance';
   const zKey = 'name';
   const xDomain = [startDate.getTime(), endDate.getTime()];
   $: yDomain = [0, (target + 500) * 1000]; // add a bit of space on top.
@@ -52,8 +52,8 @@
   x={xKey}
   y={yKey}
   z={zKey}
-  xDomain={xDomain}
-  yDomain={yDomain}
+  {xDomain}
+  {yDomain}
   data={dataWithTarget}
   flatData={flatDataWithTarget}
 >

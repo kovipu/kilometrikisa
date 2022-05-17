@@ -21,7 +21,7 @@ type AthleteSession = {
 
 type CumulativeDataPoint = {
   date: number;
-  total_distance: number;
+  totalDistance: number;
 };
 
 type AthleteData = {
@@ -34,8 +34,11 @@ type AthleteData = {
     totalDistance: number;
     totalRideDays: number;
     totalRideTime: number;
+    averageRideLength: number;
+    averageRideDistance: number;
+    averageSpeed: number;
     maxSpeed: number;
-  }
+  };
 };
 
 type AthleteDataWithColor = AthleteData & { color: string };

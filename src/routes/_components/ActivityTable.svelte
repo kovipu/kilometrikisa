@@ -38,9 +38,9 @@
         <td>{firstname} {lastname}</td>
         <td>{formatDistance(activityData.totalDistance)}</td>
         <td>{activityData.totalRideDays}</td>
-        <td></td>
-        <td></td>
-        <td></td>
+        <td>{formatDistance(activityData.averageRideDistance)}</td>
+        <td>{formatElapsedTime(activityData.averageRideLength)}</td>
+        <td>{formatSpeed(activityData.averageSpeed)}</td>
         <td>{formatSpeed(activityData.maxSpeed)}</td>
       </tr>
     {/each}
