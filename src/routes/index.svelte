@@ -4,7 +4,7 @@
 
   import { onMount } from 'svelte';
   import StravaLink from './_components/StravaLink.svelte';
-  // import ActivityTable from './_components/ActivityTable.svelte';
+  import ActivityTable from './_components/ActivityTable.svelte';
 
   let loading = true;
   let athleteData: AthleteDataWithColor[] = [];
@@ -67,11 +67,11 @@
   <button on:click={handleChangeTargetClicked}>Päivitä</button>
 </div>
 
-<!-- <div class="table-container">
+<div class="table-container">
   {#if !loading}
-    <ActivityTable {activities} />
+    <ActivityTable {athleteData} />
   {/if}
-</div> -->
+</div>
 <style lang="scss">
   .hero {
     background-color: #f8fafb;

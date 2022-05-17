@@ -3,7 +3,7 @@
   import { format } from 'date-fns';
   import fi from 'date-fns/locale/fi';
 
-  export let activities: AggregatedActivity[];
+  export let athleteData: AthleteData[];
 
   const formatDate = (dateTime: number) =>
     format(new Date(dateTime), 'cccccc d.M.', { locale: fi });
@@ -23,25 +23,25 @@
 <table>
   <thead>
     <tr>
-      <td> Ajajan nimi </td>
-      <td>Kilometrit yhteensä</td>
+      <td>Kuka</td>
+      <td>Kilometrit</td>
       <td>Ajopäivät</td>
-      <td>Keskimääräinen lenkin pituus</td>
-      <td>Keskimääräinen lenkin kesto</td>
+      <td>Lenkin pituus ka.</td>
+      <td>Lenkin kesto ka.</td>
+      <td>Keskinopeus</td>
       <td>Huippunopeus</td>
-      <td />
     </tr>
   </thead>
   <tbody>
-    {#each reverse(activities) as { date, elapsed_time, average_speed, max_speed, distance, total_distance }}
+    {#each athleteData as { firstname, lastname, activityData }}
       <tr>
-        <td>{formatDate(date)}</td>
-        <td>{formatTime(date)}</td>
-        <td>{formatElapsedTime(elapsed_time)}</td>
-        <td>{formatSpeed(average_speed)}</td>
-        <td>{formatSpeed(max_speed)}</td>
-        <td>{formatDistance(distance)}</td>
-        <td>{formatDistance(total_distance)}</td>
+        <td>{firstname} {lastname}</td>
+        <td>{formatDistance(activityData.totalDistance)}</td>
+        <td>{activityData.totalRideDays}</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>{formatSpeed(activityData.maxSpeed)}</td>
       </tr>
     {/each}
   </tbody>

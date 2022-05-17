@@ -1,7 +1,7 @@
 import type { RequestHandler } from '@sveltejs/kit';
 import strava from 'strava-v3';
 import dotenv from 'dotenv';
-import { flatten, pluck, sortBy } from 'ramda';
+import { flatten, last, pluck, sortBy, uniq } from 'ramda';
 import { getAthletes, updateAthlete } from './_db';
 
 dotenv.config();
@@ -9,32 +9,30 @@ dotenv.config();
 const startDate = new Date('2022-05-01');
 const endDate = new Date('2022-09-22');
 
+type AggregatedData = {
+  aggregatedActivities: AggregatedActivity[];
+  totalDistance: number;
+  totalRideTime: number;
+  maxSpeed: number;
+}
+
 export const get: RequestHandler = async ({ request }) => {
   const athletes = getAthletes();
 
-  const athleteDataPromises: Promise<AthleteData>[] = athletes.map(async (athlete) => {
-    const activities: Activity[] = await getActivities(athlete);
+  const athleteActivities = await Promise.all(athletes.map(athlete => getActivities(athlete)));
+
+  const athleteData: AthleteData[] = athleteActivities.map((activities, athleteIdx) => {
     const sortedActivities = sortBy((a) => a.start_date_local, activities);
 
-    const aggregatedActivities = sortedActivities.reduce<AggregatedActivity[]>((acc, activity) => {
-      const { name, start_date, distance, elapsed_time, average_speed, max_speed } = activity;
-      const previousDistance = acc[acc.length - 1]?.total_distance || 0;
+    const { aggregatedActivities, totalDistance, totalRideTime, maxSpeed } = aggregateData(sortedActivities);
 
-      // Convert to whole numbers to avoid floating point errors
-      const total_distance = (previousDistance * 100 + activity.distance * 100) / 100;
-
-      acc.push({
-        name,
-        date: Date.parse(start_date),
-        distance,
-        elapsed_time,
-        average_speed,
-        max_speed,
-        total_distance,
-      });
-
-      return acc;
-    }, []);
+    const totalRideDays = uniq(pluck('start_date', activities)).length;
+    const activityData = {
+      totalDistance,
+      totalRideTime,
+      maxSpeed,
+      totalRideDays
+    }
 
     const cumulativeData: CumulativeDataPoint[] = aggregatedActivities.map(
       ({ date, total_distance }) => ({
@@ -44,17 +42,17 @@ export const get: RequestHandler = async ({ request }) => {
     );
     cumulativeData.unshift({ date: startDate.getTime(), total_distance: 0 });
 
-    const { id, firstname, lastname, profile } = athlete;
+    const { id, firstname, lastname, profile } = athletes[athleteIdx];
     return {
       id,
       firstname,
       lastname,
       profile,
       cumulativeData,
+      activityData
     };
   });
 
-  const athleteData = await Promise.all(athleteDataPromises);
   const flatData = flatten(pluck('cumulativeData', athleteData));
 
   return {
@@ -97,3 +95,33 @@ const getActivities = async ({
     }
   }
 };
+
+const aggregateData = (data: Activity[]): AggregatedData => {
+  return data.reduce<AggregatedData>((acc, activity) => {
+    const { name, start_date, distance, elapsed_time, average_speed, max_speed } = activity;
+    const previousDistance = last(acc.aggregatedActivities)?.totalDistance || 0;
+
+    // Convert to whole numbers to avoid floating point errors
+    const totalDistance = (previousDistance * 100 + activity.distance * 100) / 100;
+
+    acc.aggregatedActivities.push({
+      name,
+      date: Date.parse(start_date),
+      distance,
+      elapsedTime: elapsed_time,
+      averageSpeed: average_speed,
+      totalDistance,
+    });
+
+    acc.totalDistance = totalDistance;
+    acc.totalRideTime += elapsed_time;
+    acc.maxSpeed = Math.max(acc.maxSpeed, max_speed);
+
+    return acc;
+  }, {
+    aggregatedActivities: [],
+    totalDistance: 0,
+    totalRideTime: 0,
+    maxSpeed: 0,
+  });
+}

@@ -18,10 +18,6 @@
     d.getTime(),
   );
 
-  const tooltipDataset = eachDayOfInterval({ start: startDate, end: endDate }).map((d) =>
-    d.getTime(),
-  );
-
   const days: number[] = eachDayOfInterval({ start: startDate, end: endDate }).map((d) =>
     d.getTime(),
   );
@@ -68,6 +64,6 @@
   </Svg>
   <Html>
     <Legend />
-    <Tooltip dataset={tooltipDataset} />
+    <Tooltip dataset={days} />
   </Html>
 </LayerCake>

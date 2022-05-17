@@ -30,6 +30,12 @@ type AthleteData = {
   lastname?: string;
   profile?: string;
   cumulativeData: CumulativeDataPoint[];
+  activityData: {
+    totalDistance: number;
+    totalRideDays: number;
+    totalRideTime: number;
+    maxSpeed: number;
+  }
 };
 
 type AthleteDataWithColor = AthleteData & { color: string };
@@ -51,8 +57,7 @@ type AggregatedActivity = {
   name: string;
   date: number;
   distance: number;
-  elapsed_time: number;
-  average_speed: number;
-  max_speed: number;
-  total_distance: number;
+  elapsedTime: number;
+  averageSpeed: number;
+  totalDistance: number;
 };
