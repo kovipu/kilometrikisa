@@ -5,8 +5,8 @@
 
   const { padding, xRange, yScale } = getContext('LayerCake');
 
-  const ticks = 4;
-  const tickVals = $yScale.ticks(ticks);
+  const ticks = 5;
+  $: tickVals = $yScale.ticks(ticks);
 
   const formatDistance = (distance: number): string => `${(distance / 1000).toFixed()}`;
 </script>

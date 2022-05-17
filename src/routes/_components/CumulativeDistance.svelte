@@ -9,6 +9,7 @@
 
   export let athleteData: AthleteDataWithColor[] = [];
   export let flatData: CumulativeDataPoint[] = [];
+  export let target: number;
 
   const startDate = new Date('2022-05-01T00:00:00.000Z');
   const endDate = new Date('2022-09-22T23:59:59.999Z');
@@ -21,30 +22,33 @@
     d.getTime(),
   );
 
-  const target = 1000 * 1000;
   const days: number[] = eachDayOfInterval({ start: startDate, end: endDate }).map((d) =>
     d.getTime(),
   );
-  const targetData: CumulativeDataPoint[] = days.map((date, i) => {
-    const total_distance = target * ((i + 1) / days.length);
+
+  let targetData: CumulativeDataPoint[] = [];
+  $: targetData = days.map((date, i) => {
+    const total_distance = 1000 * target * ((i + 1) / days.length);
     return {
       date,
       total_distance,
     };
   });
 
-  const dataWithTarget = [
+  $: dataWithTarget = [
     {
       firstname: 'Tavoite',
       color: '#00bbff35',
       cumulativeData: targetData,
     },
   ].concat(athleteData);
-  const flatDataWithTarget = targetData.concat(flatData);
+  $: flatDataWithTarget = targetData.concat(flatData);
 
   const xKey = 'date';
   const yKey = 'total_distance';
   const zKey = 'name';
+  const xDomain = [startDate.getTime(), endDate.getTime()];
+  $: yDomain = [0, (target + 500) * 1000]; // add a bit of space on top.
 </script>
 
 <LayerCake
@@ -52,7 +56,8 @@
   x={xKey}
   y={yKey}
   z={zKey}
-  xDomain={[startDate.getTime(), endDate.getTime()]}
+  xDomain={xDomain}
+  yDomain={yDomain}
   data={dataWithTarget}
   flatData={flatDataWithTarget}
 >
