@@ -24,10 +24,12 @@ type CumulativeDataPoint = {
   total_distance: number;
 };
 
-type CumulativeData = {
-  name: string;
-  color: string;
-  values: CumulativeDataPoint[];
+type AthleteData = {
+  id: number;
+  firstname: string;
+  lastname: string;
+  profile: string;
+  cumulativeData: CumulativeDataPoint[];
 };
 
 type Activity = {

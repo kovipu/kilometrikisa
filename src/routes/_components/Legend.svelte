@@ -13,7 +13,7 @@
   {#each $data as group}
     <span class="legend-item">
       <em style="color:{group.color};">●</em>
-      {group.name}
+      {group.firstname}
     </span>
   {/each}
 </div>

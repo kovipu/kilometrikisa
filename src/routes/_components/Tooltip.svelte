@@ -20,6 +20,7 @@
   $: findValue = (values: CumulativeDataPoint[]) =>
     reverse(values).find((d: CumulativeDataPoint) => $x(d) < (closestDate || 0));
 
+  const formatDate = (date: number) => format(new Date(date), 'd. MMM', { locale: fi });
   const formatDistance = (distance: number): string => `${(distance / 1000).toFixed(1)} km`;
 </script>
 
@@ -38,11 +39,11 @@
   left: {left}px;
 "
   >
-    <em>{format(new Date(closestDate), 'd. MMM', { locale: fi })}</em>
+    <em>{formatDate(closestDate)}</em>
     {#each $data as group}
       <p>
-        <span>{group.name}:</span>
-        <em>{formatDistance($y(findValue(group.values) || {}))}</em>
+        <span>{group.firstname}:</span>
+        <em>{formatDistance($y(findValue(group.cumulativeData) || {}))}</em>
       </p>
     {/each}
   </div>

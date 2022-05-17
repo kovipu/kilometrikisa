@@ -4,24 +4,21 @@
 
   import { onMount } from 'svelte';
   import StravaLink from './_components/StravaLink.svelte';
-  import ActivityTable from './_components/ActivityTable.svelte';
+  // import ActivityTable from './_components/ActivityTable.svelte';
 
   let loading = true;
-  let data: CumulativeData[];
+  let athleteData: AthleteData[];
   let flatData: CumulativeDataPoint[];
-  let activities: AggregatedActivity[];
 
   onMount(async () => {
     const response = await fetch('/strava/get-activities');
     const json: {
-      data: CumulativeData[];
+      athleteData: AthleteData[];
       flatData: CumulativeDataPoint[];
-      activities: AggregatedActivity[];
     } = await response.json();
     loading = false;
-    data = json.data;
+    athleteData = json.athleteData;
     flatData = json.flatData;
-    activities = json.activities;
   });
 </script>
 
@@ -37,15 +34,15 @@
     {#if loading}
       <Loading />
     {:else}
-      <CumulativeDistance {data} {flatData} />
+      <CumulativeDistance {athleteData} {flatData} />
     {/if}
   </div>
 </div>
-<div class="table-container">
+<!-- <div class="table-container">
   {#if !loading}
     <ActivityTable {activities} />
   {/if}
-</div>
+</div> -->
 
 <style lang="scss">
   .hero {

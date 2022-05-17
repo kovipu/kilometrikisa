@@ -1,12 +1,13 @@
 <script lang="ts">
   import { getContext } from 'svelte';
   import { format } from 'date-fns';
+  import fi from 'date-fns/locale/fi';
 
   export let ticks: number[] = [];
 
   const { padding, xScale, yRange } = getContext('LayerCake');
 
-  const formatTick = (tick: number) => format(new Date(tick), 'd.M.');
+  const formatTick = (tick: number) => format(new Date(tick), 'LLL', { locale: fi });
 </script>
 
 <g class="axis x-axis" transform="translate(0, {$padding.bottom})">

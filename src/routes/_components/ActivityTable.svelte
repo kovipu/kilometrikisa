@@ -23,13 +23,13 @@
 <table>
   <thead>
     <tr>
-      <td>Päivämäärä</td>
-      <td>Kellonaika</td>
-      <td>Kesto</td>
-      <td>Keskinopeus</td>
+      <td> Ajajan nimi </td>
+      <td>Kilometrit yhteensä</td>
+      <td>Ajopäivät</td>
+      <td>Keskimääräinen lenkin pituus</td>
+      <td>Keskimääräinen lenkin kesto</td>
       <td>Huippunopeus</td>
-      <td>Matka</td>
-      <td>Yhteensä</td>
+      <td />
     </tr>
   </thead>
   <tbody>

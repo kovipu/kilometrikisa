@@ -7,13 +7,13 @@
   import Tooltip from './Tooltip.svelte';
   import AxisY from './AxisY.svelte';
 
-  export let data: CumulativeData[] = [];
+  export let athleteData: AthleteData[] = [];
   export let flatData: CumulativeDataPoint[] = [];
 
   const startDate = new Date('2022-05-01T00:00:00.000Z');
   const endDate = new Date('2022-09-22T23:59:59.999Z');
 
-  const ticks = eachDayOfInterval({ start: startDate, end: endDate }, { step: 14 }).map((d) =>
+  const ticks = eachDayOfInterval({ start: startDate, end: endDate }, { step: 31 }).map((d) =>
     d.getTime(),
   );
 
@@ -32,7 +32,8 @@
   y={yKey}
   z={zKey}
   yDomain={[0, 1500 * 1000]}
-  {data}
+  xDomain={[startDate.getTime(), endDate.getTime()]}
+  data={athleteData}
   {flatData}
 >
   <Svg>

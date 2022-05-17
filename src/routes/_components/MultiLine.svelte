@@ -8,8 +8,8 @@
 </script>
 
 <g class="line-group">
-  {#each $data as group}
-    <path class="path-line" d={path(group.values)} stroke={group.color} />
+  {#each $data as { cumulativeData }}
+    <path class="path-line" d={path(cumulativeData)} stroke="black" />
   {/each}
 </g>
 
