@@ -7,8 +7,10 @@
   // import ActivityTable from './_components/ActivityTable.svelte';
 
   let loading = true;
-  let athleteData: AthleteData[];
-  let flatData: CumulativeDataPoint[];
+  let athleteData: AthleteDataWithColor[] = [];
+  let flatData: CumulativeDataPoint[] = [];
+
+  const colors = ['#00bbff', '#ff7ac7', '#ffc400'];
 
   onMount(async () => {
     const response = await fetch('/strava/get-activities');
@@ -17,7 +19,10 @@
       flatData: CumulativeDataPoint[];
     } = await response.json();
     loading = false;
-    athleteData = json.athleteData;
+    athleteData = json.athleteData.map((athelete, i) => ({
+      ...athelete,
+      color: colors[i % colors.length],
+    }));
     flatData = json.flatData;
   });
 </script>
@@ -38,12 +43,12 @@
     {/if}
   </div>
 </div>
+
 <!-- <div class="table-container">
   {#if !loading}
     <ActivityTable {activities} />
   {/if}
 </div> -->
-
 <style lang="scss">
   .hero {
     background-color: #f8fafb;

@@ -25,12 +25,14 @@ type CumulativeDataPoint = {
 };
 
 type AthleteData = {
-  id: number;
+  id?: number;
   firstname: string;
-  lastname: string;
-  profile: string;
+  lastname?: string;
+  profile?: string;
   cumulativeData: CumulativeDataPoint[];
 };
+
+type AthleteDataWithColor = AthleteData & { color: string };
 
 type Activity = {
   name: string;

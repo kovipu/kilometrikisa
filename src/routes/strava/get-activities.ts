@@ -2,7 +2,6 @@ import type { RequestHandler } from '@sveltejs/kit';
 import strava from 'strava-v3';
 import dotenv from 'dotenv';
 import { flatten, pluck, sortBy } from 'ramda';
-import { eachDayOfInterval } from 'date-fns';
 import { getAthletes, updateAthlete } from './_db';
 
 dotenv.config();
@@ -43,6 +42,7 @@ export const get: RequestHandler = async ({ request }) => {
         total_distance,
       }),
     );
+    cumulativeData.unshift({ date: startDate.getTime(), total_distance: 0 });
 
     const { id, firstname, lastname, profile } = athlete;
     return {

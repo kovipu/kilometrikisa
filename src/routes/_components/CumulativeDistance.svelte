@@ -7,7 +7,7 @@
   import Tooltip from './Tooltip.svelte';
   import AxisY from './AxisY.svelte';
 
-  export let athleteData: AthleteData[] = [];
+  export let athleteData: AthleteDataWithColor[] = [];
   export let flatData: CumulativeDataPoint[] = [];
 
   const startDate = new Date('2022-05-01T00:00:00.000Z');
@@ -21,6 +21,27 @@
     d.getTime(),
   );
 
+  const target = 1000 * 1000;
+  const days: number[] = eachDayOfInterval({ start: startDate, end: endDate }).map((d) =>
+    d.getTime(),
+  );
+  const targetData: CumulativeDataPoint[] = days.map((date, i) => {
+    const total_distance = target * ((i + 1) / days.length);
+    return {
+      date,
+      total_distance,
+    };
+  });
+
+  const dataWithTarget = [
+    {
+      firstname: 'Tavoite',
+      color: '#00bbff35',
+      cumulativeData: targetData,
+    },
+  ].concat(athleteData);
+  const flatDataWithTarget = targetData.concat(flatData);
+
   const xKey = 'date';
   const yKey = 'total_distance';
   const zKey = 'name';
@@ -31,10 +52,9 @@
   x={xKey}
   y={yKey}
   z={zKey}
-  yDomain={[0, 1500 * 1000]}
   xDomain={[startDate.getTime(), endDate.getTime()]}
-  data={athleteData}
-  {flatData}
+  data={dataWithTarget}
+  flatData={flatDataWithTarget}
 >
   <Svg>
     <AxisY />
