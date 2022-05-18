@@ -2,7 +2,7 @@ import type { RequestHandler } from '@sveltejs/kit';
 import strava from 'strava-v3';
 import dotenv from 'dotenv';
 import { flatten, last, mean, pluck, sortBy, uniqBy } from 'ramda';
-import { getAthletes, updateAthlete } from './_db';
+import { getAthletes, updateAthlete } from '$lib/_db';
 import { format } from 'date-fns';
 
 dotenv.config();
@@ -76,7 +76,6 @@ export const get: RequestHandler = async () => {
     },
   };
 };
-
 
 const getActivities = async ({
   access_token,

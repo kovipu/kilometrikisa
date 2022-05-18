@@ -1,14 +1,12 @@
 <script lang="ts">
   import CumulativeDistance from './_components/CumulativeDistance.svelte';
-  import Loading from './_components/Loading.svelte';
 
-  import { onMount } from 'svelte';
   import StravaLink from './_components/StravaLink.svelte';
   import ActivityTable from './_components/ActivityTable.svelte';
 
-  let loading = true;
-  let athleteData: AthleteDataWithColor[] = [];
-  let flatData: CumulativeDataPoint[] = [];
+  export let athleteData: AthleteDataWithColor[];
+  export let flatData: CumulativeDataPoint[];
+
   let target: number = 1000;
 
   const colors = [
@@ -17,25 +15,15 @@
     '#ffc400',
     '#ff3e00',
     '#77dd77',
-    '#ffb347',
     '#ffe4b8',
     '#ffb3c0',
     '#ff00cc',
   ];
 
-  onMount(async () => {
-    const response = await fetch('/strava/get-activities');
-    const json: {
-      athleteData: AthleteData[];
-      flatData: CumulativeDataPoint[];
-    } = await response.json();
-    loading = false;
-    athleteData = json.athleteData.map((athelete, i) => ({
-      ...athelete,
-      color: colors[i % colors.length],
-    }));
-    flatData = json.flatData;
-  });
+  $: athleteDataWithColor = athleteData.map((data, i) => ({
+    ...data,
+    color: colors[i % colors.length],
+  }));
 
   const handleChangeTargetClicked = () => {
     const newTarget = Number(prompt('Syötä uusi tavoite:', target.toString()));
@@ -58,11 +46,7 @@
   </header>
 
   <div class="chart-container">
-    {#if loading}
-      <Loading />
-    {:else}
-      <CumulativeDistance {athleteData} {flatData} {target} />
-    {/if}
+    <CumulativeDistance athleteData={athleteDataWithColor} {flatData} {target} />
   </div>
 </div>
 
@@ -78,9 +62,7 @@
 </div>
 
 <div class="table-container">
-  {#if !loading}
-    <ActivityTable {athleteData} />
-  {/if}
+  <ActivityTable {athleteData} />
 </div>
 
 <style lang="scss">

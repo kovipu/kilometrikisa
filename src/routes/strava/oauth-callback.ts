@@ -1,7 +1,7 @@
 import type { RequestHandler } from '@sveltejs/kit';
 import strava from 'strava-v3';
 
-import { updateAthlete } from './_db';
+import { updateAthlete } from '$lib/_db';
 
 export const get: RequestHandler = async ({ url }) => {
   const code = url.searchParams.get('code');
