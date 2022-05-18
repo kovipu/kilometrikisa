@@ -15,6 +15,7 @@
       return;
     }
 
+    localStorage.setItem('target', newTarget.toString());
     target = newTarget;
   };
 </script>
@@ -60,7 +61,7 @@
 
     > .number-container {
       margin-top: 1rem;
-      margin-right: .4rem;
+      margin-right: 0.4rem;
       margin-bottom: 1rem;
 
       @media screen and (min-width: 768px) {

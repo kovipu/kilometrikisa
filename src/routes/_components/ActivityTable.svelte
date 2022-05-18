@@ -1,8 +1,6 @@
 <script lang="ts">
   import { formatDistance, formatElapsedTime, formatSpeed } from '$lib/formatters';
 
-  import { reverse } from 'ramda';
-
   export let athleteData: AthleteData[];
 </script>
 
