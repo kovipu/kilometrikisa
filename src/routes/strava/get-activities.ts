@@ -23,7 +23,8 @@ export const get: RequestHandler = async () => {
   const athleteActivities = await Promise.all(athletes.map((athlete) => getActivities(athlete)));
 
   const athleteData: AthleteData[] = athleteActivities.map((activities, athleteIdx) => {
-    const sortedActivities = sortBy((a) => a.start_date_local, activities);
+    const athleteRides = activities.filter(({ type }) => type === 'Ride' || type === 'EBikeRide');
+    const sortedActivities = sortBy((a) => a.start_date_local, athleteRides);
 
     const { aggregatedActivities, totalDistance, totalRideTime, maxSpeed } =
       aggregateData(sortedActivities);
@@ -76,7 +77,6 @@ export const get: RequestHandler = async () => {
   };
 };
 
-const after = startDate.getTime() / 1000;
 
 const getActivities = async ({
   access_token,
@@ -84,6 +84,7 @@ const getActivities = async ({
   firstname,
   ...rest
 }: AthleteSession): Promise<Activity[]> => {
+  const after = startDate.getTime() / 1000;
   try {
     return await strava.athlete.listActivities({ access_token, after, per_page: 200 });
   } catch (error) {

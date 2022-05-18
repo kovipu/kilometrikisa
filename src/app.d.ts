@@ -54,6 +54,7 @@ type Activity = {
   average_speed: number;
   max_speed: number;
   upload_id: number;
+  type: ActivityType;
 };
 
 type AggregatedActivity = {
@@ -64,3 +65,5 @@ type AggregatedActivity = {
   averageSpeed: number;
   totalDistance: number;
 };
+
+type ActivityType = 'Ride' | 'EBikeRide' | 'Run' | 'Swim';
