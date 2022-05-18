@@ -74,11 +74,16 @@ export const get: RequestHandler = async ({ request }) => {
 
   const flatData = flatten(pluck('cumulativeData', athleteData));
 
+  const currentDistance = session
+    ? athleteData.find((athlete) => athlete.id === session.id)?.activityData.totalDistance
+    : null;
+
   return {
     status: 200,
     body: {
       athleteData,
       flatData,
+      currentDistance,
     },
   };
 };

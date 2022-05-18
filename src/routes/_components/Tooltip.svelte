@@ -1,8 +1,7 @@
 <script lang="ts">
   import { getContext } from 'svelte';
-  import { format } from 'date-fns';
-  import fi from 'date-fns/locale/fi/index.js';
   import { reverse } from 'ramda';
+  import { formatDate, formatDistance } from '$lib/formatters';
 
   const { data, y, x, xScale } = getContext('LayerCake');
 
@@ -19,9 +18,6 @@
 
   $: findValue = (values: CumulativeDataPoint[]) =>
     reverse(values).find((d: CumulativeDataPoint) => $x(d) < (closestDate || 0));
-
-  const formatDate = (date: number) => format(new Date(date), 'd. MMM', { locale: fi });
-  const formatDistance = (distance: number): string => `${(distance / 1000).toFixed(1)} km`;
 </script>
 
 <div

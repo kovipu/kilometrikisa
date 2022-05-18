@@ -3,11 +3,33 @@
   import StravaLink from './_components/StravaLink.svelte';
   import ActivityTable from './_components/ActivityTable.svelte';
   import Target from './_components/Target.svelte';
+  import { eachDayOfInterval, startOfDay } from 'date-fns';
+  import { endDateTime, startDateTime } from '$lib/constants';
+import { findLastIndex, reverse } from 'ramda';
 
   export let athleteData: AthleteDataWithColor[];
   export let flatData: CumulativeDataPoint[];
+  export let currentDistance: number | null = null;
 
   let target: number = 1000;
+
+  const days: number[] = eachDayOfInterval({ start: startDateTime, end: endDateTime }).map((d) =>
+    d.getTime(),
+  );
+
+  $: targetData = days.map((date, i) => {
+    const totalDistance = 1000 * target * ((i + 1) / days.length);
+    return {
+      date,
+      totalDistance,
+    };
+  });
+
+  $: currentDayIndex = findLastIndex(
+    ({ date }) => date <= new Date().getTime(),
+    targetData,
+  );
+  $: currentDayTarget = targetData[currentDayIndex - 1]?.totalDistance;
 
   const colors = [
     '#00bbff',
@@ -35,11 +57,11 @@
   </header>
 
   <div class="chart-container">
-    <CumulativeDistance athleteData={athleteDataWithColor} {flatData} {target} />
+    <CumulativeDistance athleteData={athleteDataWithColor} {flatData} {target} {targetData} {days} />
   </div>
 </div>
 
-<Target bind:target />
+<Target bind:target {currentDistance} {currentDayTarget} />
 
 <div class="table-container">
   <ActivityTable {athleteData} />
