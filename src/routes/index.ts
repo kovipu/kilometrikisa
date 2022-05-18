@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import { flatten, last, mean, pluck, sortBy, uniqBy } from 'ramda';
 import { getAthletes, updateAthlete } from '$lib/_db';
 import { format } from 'date-fns';
+import cookie from 'cookie';
 
 dotenv.config();
 
@@ -17,7 +18,12 @@ type AggregatedData = {
   maxSpeed: number;
 };
 
-export const get: RequestHandler = async () => {
+export const get: RequestHandler = async ({ request }) => {
+  const session = getSessionFromRequest(request);
+  if (session) {
+    updateAthlete(session);
+  }
+
   const athletes = getAthletes();
 
   const athleteActivities = await Promise.all(athletes.map((athlete) => getActivities(athlete)));
@@ -75,6 +81,17 @@ export const get: RequestHandler = async () => {
       flatData,
     },
   };
+};
+
+const getSessionFromRequest = (request: Request): AthleteSession | null => {
+  const cookies = request.headers.get('cookie');
+
+  if (!cookies) {
+    return null;
+  }
+
+  const { session } = cookie.parse(cookies);
+  return session ? JSON.parse(session) : null;
 };
 
 const getActivities = async ({
