@@ -37,7 +37,7 @@ export const get: RequestHandler = async ({ request }) => {
 
     const totalRideDays = uniqBy(
       (date: string) => format(new Date(date), 'yyyy-MM-dd'),
-      pluck('start_date', activities),
+      pluck('start_date', athleteRides),
     ).length;
     const averageRideDistance = totalDistance / aggregatedActivities.length;
     const averageRideLength = mean(pluck('elapsedTime', aggregatedActivities));
