@@ -26,13 +26,15 @@
     display: flex;
     flex-direction: row-reverse;
     justify-content: center;
+    flex-wrap: wrap;
 
     > .legend-item {
-      padding: 0.5rem;
+      padding: 0.2rem 0.5rem;
       font-size: 0.9rem;
 
       @media screen and (min-width: 768px) {
         font-size: 1rem;
+        padding: 0.5rem;
       }
     }
   }
