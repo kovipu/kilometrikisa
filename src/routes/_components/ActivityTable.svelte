@@ -1,7 +1,12 @@
 <script lang="ts">
   import { formatDistance, formatElapsedTime, formatSpeed } from '$lib/formatters';
+  import { sort } from 'ramda';
 
   export let athleteData: AthleteData[];
+
+  const sortByDistance = sort(
+    (a: AthleteData, b: AthleteData) => b.activityData.totalDistance - a.activityData.totalDistance,
+  );
 </script>
 
 <table>
@@ -17,7 +22,7 @@
     </tr>
   </thead>
   <tbody>
-    {#each athleteData as { firstname, lastname, activityData }}
+    {#each sortByDistance(athleteData) as { firstname, lastname, activityData }}
       <tr>
         <td>{firstname} {lastname}</td>
         <td>{formatDistance(activityData.totalDistance)}</td>
