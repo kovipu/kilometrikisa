@@ -4,7 +4,7 @@ import cookie from 'cookie';
 
 import { updateAthlete } from '$lib/_db';
 
-export const get: RequestHandler = async ({ url }) => {
+export const GET: RequestHandler = async ({ url }) => {
   const code = url.searchParams.get('code');
 
   if (!code) {

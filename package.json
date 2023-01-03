@@ -2,20 +2,17 @@
   "name": "kilometrikisa",
   "version": "0.0.1",
   "scripts": {
-    "dev": "svelte-kit dev",
+    "dev": "vite dev",
     "start": "node out",
     "build": "NODE_ENV=production svelte-kit build",
-    "package": "svelte-kit package",
-    "preview": "svelte-kit preview",
-    "prepare": "svelte-kit sync",
+    "preview": "vite preview",
     "check": "svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-check --tsconfig ./tsconfig.json --watch",
     "lint": "prettier --ignore-path .gitignore --check --plugin-search-dir=. . && eslint --ignore-path .gitignore .",
     "format": "prettier --ignore-path .gitignore --write --plugin-search-dir=. ."
   },
   "devDependencies": {
-    "@sveltejs/adapter-auto": "next",
-    "@sveltejs/kit": "next",
+    "@sveltejs/kit": "^1.0.0-next.405",
     "@typescript-eslint/eslint-plugin": "^5.10.1",
     "@typescript-eslint/parser": "^5.10.1",
     "eslint": "^8.12.0",
@@ -25,10 +22,11 @@
     "prettier-plugin-svelte": "^2.5.0",
     "sass": "^1.51.0",
     "svelte": "^3.44.0",
-    "svelte-check": "^2.2.6",
-    "svelte-preprocess": "^4.10.1",
+    "svelte-check": "^3.0.1",
+    "svelte-preprocess": "^5.0.0",
     "tslib": "^2.3.1",
-    "typescript": "~4.6.2"
+    "typescript": "^4.9.4",
+    "vite": "^3.2.5"
   },
   "type": "module",
   "dependencies": {
@@ -39,7 +37,7 @@
     "cookie": "^0.5.0",
     "date-fns": "^2.28.0",
     "dotenv": "^16.0.1",
-    "layercake": "^6.1.0",
+    "layercake": "^7.2.2",
     "ramda": "^0.28.0",
     "strava-v3": "^2.1.0"
   }

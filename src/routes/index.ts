@@ -16,7 +16,7 @@ type AggregatedData = {
   maxSpeed: number;
 };
 
-export const get: RequestHandler = async ({ request }) => {
+export const GET: RequestHandler = async ({ request }) => {
   const session = getSessionFromRequest(request);
   if (session) {
     updateAthlete(session);
