@@ -1,11 +1,11 @@
-import type { RequestHandler } from '@sveltejs/kit';
+import type { PageServerLoad } from './$types';
 import strava from 'strava-v3';
 import dotenv from 'dotenv';
 import { flatten, last, mean, pluck, sortBy, uniqBy } from 'ramda';
 import { getAthletes, updateAthlete } from '$lib/_db';
 import { format } from 'date-fns';
-import cookie from 'cookie';
 import { startDateTime, endDateTime } from '$lib/constants';
+import type { Cookies } from '@sveltejs/kit';
 
 dotenv.config();
 
@@ -16,8 +16,8 @@ type AggregatedData = {
   maxSpeed: number;
 };
 
-export const GET: RequestHandler = async ({ request }) => {
-  const session = getSessionFromRequest(request);
+export const load: PageServerLoad = async ({ cookies }) => {
+  const session = getSessionFromCookies(cookies);
   if (session) {
     updateAthlete(session);
   }
@@ -77,23 +77,19 @@ export const GET: RequestHandler = async ({ request }) => {
     : null;
 
   return {
-    status: 200,
-    body: {
-      athleteData,
-      flatData,
-      currentDistance,
-    },
+    athleteData,
+    flatData,
+    currentDistance,
   };
 };
 
-const getSessionFromRequest = (request: Request): AthleteSession | null => {
-  const cookies = request.headers.get('cookie');
+const getSessionFromCookies = (cookies: Cookies): AthleteSession | null => {
+  const session = cookies.get('session')
 
-  if (!cookies) {
+  if (!session) {
     return null;
   }
 
-  const { session } = cookie.parse(cookies);
   return session ? JSON.parse(session) : null;
 };
 

@@ -1,17 +1,13 @@
-import type { RequestHandler } from '@sveltejs/kit';
+import { redirect, type RequestHandler } from '@sveltejs/kit';
 import strava from 'strava-v3';
-import cookie from 'cookie';
 
 import { updateAthlete } from '$lib/_db';
 
-export const GET: RequestHandler = async ({ url }) => {
+export const GET: RequestHandler = async ({ url, cookies }) => {
   const code = url.searchParams.get('code');
 
   if (!code) {
-    return {
-      status: 400,
-      body: 'Strava access code not found',
-    };
+    return new Response('Strava access code not found', { status: 400 });
   }
 
   const { access_token, refresh_token, athlete } = await strava.oauth.getToken(code);
@@ -29,19 +25,14 @@ export const GET: RequestHandler = async ({ url }) => {
   };
   updateAthlete(athleteSession);
 
-  const sessionCookie = cookie.serialize('session', JSON.stringify(athleteSession), {
+  const sessionCookie = JSON.stringify(athleteSession)
+
+  cookies.set('session', sessionCookie, {
     path: '/',
     httpOnly: true,
     sameSite: 'strict',
     secure: process.env.NODE_ENV === 'production',
     maxAge: 31536000,
   });
-
-  return {
-    status: 302,
-    headers: {
-      location: '/',
-      'set-cookie': sessionCookie,
-    },
-  };
+  throw redirect(302, '/');
 };

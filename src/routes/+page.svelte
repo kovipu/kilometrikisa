@@ -6,11 +6,10 @@
   import { eachDayOfInterval } from 'date-fns';
   import { endDateTime, startDateTime } from '$lib/constants';
   import { findLastIndex } from 'ramda';
-  import { browser } from '$app/env';
+  import { browser } from '$app/environment';
 
-  export let athleteData: AthleteDataWithColor[];
-  export let flatData: CumulativeDataPoint[];
-  export let currentDistance: number | null = null;
+  export let data: IndexPageData;
+  const { athleteData, flatData, currentDistance } = data;
 
   // Grab saved target from localStorage.
   const initialTarget = browser ? Number(localStorage.getItem('target') ?? 1000) : 1000;
@@ -43,7 +42,7 @@
     '#ff00cc',
   ];
 
-  $: athleteDataWithColor = athleteData.map((data, i) => ({
+  $: athleteDataWithColor = athleteData?.map((data, i) => ({
     ...data,
     color: colors[i % colors.length],
   }));

@@ -9,6 +9,12 @@ declare namespace App {
   // interface Stuff {}
 }
 
+type IndexPageData = {
+  athleteData: AthleteDataWithColor[];
+  flatData: CumulativeDataPoint[];
+  currentDistance: number;
+}
+
 type AthleteSession = {
   id: number;
   firstname: string;
