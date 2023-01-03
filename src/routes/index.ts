@@ -5,11 +5,9 @@ import { flatten, last, mean, pluck, sortBy, uniqBy } from 'ramda';
 import { getAthletes, updateAthlete } from '$lib/_db';
 import { format } from 'date-fns';
 import cookie from 'cookie';
+import { startDateTime, endDateTime } from '$lib/constants';
 
 dotenv.config();
-
-const startDate = new Date('2022-05-01');
-const endDate = new Date('2022-09-22');
 
 type AggregatedData = {
   aggregatedActivities: AggregatedActivity[];
@@ -59,7 +57,7 @@ export const get: RequestHandler = async ({ request }) => {
         totalDistance,
       }),
     );
-    cumulativeData.unshift({ date: startDate.getTime(), totalDistance: 0 });
+    cumulativeData.unshift({ date: startDateTime.getTime(), totalDistance: 0 });
 
     const { id, firstname, lastname, profile } = athletes[athleteIdx];
     return {
@@ -105,9 +103,10 @@ const getActivities = async ({
   firstname,
   ...rest
 }: AthleteSession): Promise<Activity[]> => {
-  const after = startDate.getTime() / 1000;
+  const after = startDateTime.getTime() / 1000;
+  const before = endDateTime.getTime() / 1000;
   try {
-    return await strava.athlete.listActivities({ access_token, after, per_page: 200 });
+    return await strava.athlete.listActivities({ access_token, after, before, per_page: 200 });
   } catch (error) {
     // Assume access_token is expired and refresh it
     try {

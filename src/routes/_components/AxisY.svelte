@@ -10,7 +10,7 @@
 </script>
 
 <g class="axis y-axis">
-  {#each tickVals as tick, i}
+  {#each tickVals as tick}
     <g class="tick" transform="translate(-10,{$yScale(tick)})">
       <line class="gridline" x2="100%" />
       <text text-anchor="end" transform="translate(-3, 3)">{formatDistance(tick)}</text>
