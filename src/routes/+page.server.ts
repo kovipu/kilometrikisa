@@ -2,7 +2,7 @@ import type { PageServerLoad } from './$types';
 import strava from 'strava-v3';
 import dotenv from 'dotenv';
 import { flatten, last, mean, pluck, sortBy, uniqBy } from 'ramda';
-import { getAthletes, updateAthlete } from '$lib/_db';
+import { getAthletes, updateAthlete } from '$lib/db';
 import { format } from 'date-fns';
 import { startDateTime, endDateTime } from '$lib/constants';
 import type { Cookies } from '@sveltejs/kit';
@@ -84,7 +84,7 @@ export const load: PageServerLoad = async ({ cookies }) => {
 };
 
 const getSessionFromCookies = (cookies: Cookies): AthleteSession | null => {
-  const session = cookies.get('session')
+  const session = cookies.get('session');
 
   if (!session) {
     return null;

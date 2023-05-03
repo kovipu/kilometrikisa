@@ -1,7 +1,7 @@
 import { redirect, type RequestHandler } from '@sveltejs/kit';
 import strava from 'strava-v3';
 
-import { updateAthlete } from '$lib/_db';
+import { updateAthlete } from '$lib/db';
 
 export const GET: RequestHandler = async ({ url, cookies }) => {
   const code = url.searchParams.get('code');
@@ -25,7 +25,7 @@ export const GET: RequestHandler = async ({ url, cookies }) => {
   };
   updateAthlete(athleteSession);
 
-  const sessionCookie = JSON.stringify(athleteSession)
+  const sessionCookie = JSON.stringify(athleteSession);
 
   cookies.set('session', sessionCookie, {
     path: '/',
