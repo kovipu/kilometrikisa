@@ -22,6 +22,7 @@
 
 <div
   class="bg"
+  role="tooltip"
   on:mousemove={findClosestDate}
   on:mouseout={() => (closestDate = undefined)}
   on:blur={() => (closestDate = undefined)}
