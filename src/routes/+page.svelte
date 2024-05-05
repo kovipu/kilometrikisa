@@ -1,7 +1,6 @@
 <script lang="ts">
   import CumulativeDistance from './_components/CumulativeDistance.svelte';
   import StravaLink from './_components/StravaLink.svelte';
-  import ActivityTable from './_components/ActivityTable.svelte';
   import Target from './_components/Target.svelte';
   import { eachDayOfInterval } from 'date-fns';
   import { endDateTime, startDateTime } from '$lib/constants';
@@ -67,11 +66,7 @@
   </div>
 </div>
 
-<Target bind:target {currentDistance} {currentDayTarget} />
-
-<div class="table-container">
-  <ActivityTable {athleteData} />
-</div>
+<Target bind:target {currentDistance} {currentDayTarget} {athleteData} />
 
 <style lang="scss">
   .hero {
@@ -110,13 +105,22 @@
     }
   }
 
-  .table-container {
-    /* width: 80%; */
+  .info-container {
+    display: flex;
+    flex-wrap: wrap;
+    width: 90%;
     margin: 2rem auto;
-    overflow-x: auto;
+    gap: 2rem;
 
-    @media screen and (min-width: 768px) {
-      width: 80%;
+    > .data-container {
+      padding: 1rem;
+      border: 3px solid #ccc;
+      border-radius: 1.5rem;
+    }
+
+    .table-container {
+      margin-top: 1.5rem;
+      overflow-x: auto;
     }
   }
 </style>

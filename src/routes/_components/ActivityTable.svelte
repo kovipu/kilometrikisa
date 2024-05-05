@@ -12,13 +12,10 @@
 <table>
   <thead>
     <tr>
-      <td>Kuka</td>
-      <td>Kilometrit</td>
+      <td>Nimi</td>
+      <td>Tulos</td>
+      <td>Lenkin keskiarvo</td>
       <td>Ajopäivät</td>
-      <td>Lenkin pituus ka.</td>
-      <td>Lenkin kesto ka.</td>
-      <td>Keskinopeus</td>
-      <td>Huippunopeus</td>
     </tr>
   </thead>
   <tbody>
@@ -26,11 +23,8 @@
       <tr>
         <td>{firstname} {lastname}</td>
         <td>{formatDistance(activityData.totalDistance)}</td>
-        <td>{activityData.totalRideDays}</td>
         <td>{formatDistance(activityData.averageRideDistance)}</td>
-        <td>{formatElapsedTime(activityData.averageRideLength)}</td>
-        <td>{formatSpeed(activityData.averageSpeed)}</td>
-        <td>{formatSpeed(activityData.maxSpeed)}</td>
+        <td>{activityData.totalRideDays}</td>
       </tr>
     {/each}
   </tbody>
