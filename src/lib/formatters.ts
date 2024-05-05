@@ -1,7 +1,6 @@
 import { format } from 'date-fns';
-import fi from 'date-fns/locale/fi/index.js';
 
-const formatDate = (date: number) => format(new Date(date), 'd. MMM', { locale: fi });
+const formatDate = (date: number) => format(new Date(date), 'd. MMM');
 
 const formatTime = (dateTime: number) => format(new Date(dateTime), 'HH:mm');
 
