@@ -13,7 +13,7 @@ type IndexPageData = {
   athleteData: AthleteDataWithColor[];
   flatData: CumulativeDataPoint[];
   currentDistance: number;
-}
+};
 
 type AthleteSession = {
   id: number;
