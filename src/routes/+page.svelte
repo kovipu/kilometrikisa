@@ -1,14 +1,14 @@
 <script lang="ts">
   import CumulativeDistance from './_components/CumulativeDistance.svelte';
   import StravaLink from './_components/StravaLink.svelte';
-  import Target from './_components/Target.svelte';
+  import DataCards from './_components/DataCards.svelte';
   import { eachDayOfInterval } from 'date-fns';
   import { endDateTime, startDateTime } from '$lib/constants';
   import { findLastIndex } from 'ramda';
   import { browser } from '$app/environment';
 
   export let data: IndexPageData;
-  const { athleteData, flatData, currentDistance } = data;
+  const { athleteData, flatData, currentDistance, weeklyDistance } = data;
 
   // Grab saved target from localStorage.
   const initialTarget = browser ? Number(localStorage.getItem('target') ?? 1000) : 1000;
@@ -66,7 +66,7 @@
   </div>
 </div>
 
-<Target bind:target {currentDistance} {currentDayTarget} {athleteData} />
+<DataCards bind:target {currentDistance} {currentDayTarget} {athleteData} {weeklyDistance} />
 
 <style lang="scss">
   .hero {

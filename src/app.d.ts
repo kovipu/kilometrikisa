@@ -13,6 +13,7 @@ type IndexPageData = {
   athleteData: AthleteDataWithColor[];
   flatData: CumulativeDataPoint[];
   currentDistance: number;
+  weeklyDistance: number;
 };
 
 type AthleteSession = {
@@ -45,6 +46,7 @@ type AthleteData = {
     averageSpeed: number;
     maxSpeed: number;
   };
+  weeklyDistance: number;
 };
 
 type AthleteDataWithColor = AthleteData & { color: string };

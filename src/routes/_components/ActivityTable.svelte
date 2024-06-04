@@ -14,7 +14,7 @@
     <tr>
       <td>Nimi</td>
       <td>Tulos</td>
-      <td>Lenkin keskiarvo</td>
+      <td>Lenkin keskipituus</td>
       <td>Ajopäivät</td>
     </tr>
   </thead>

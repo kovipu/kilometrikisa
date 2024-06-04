@@ -3,7 +3,7 @@ import strava from 'strava-v3';
 import dotenv from 'dotenv';
 import { flatten, last, mean, pluck, sortBy, uniqBy } from 'ramda';
 import { getAthletes, updateAthlete } from '$lib/db';
-import { format } from 'date-fns';
+import { format, isSameWeek } from 'date-fns';
 import { startDateTime, endDateTime } from '$lib/constants';
 import type { Cookies } from '@sveltejs/kit';
 
@@ -14,6 +14,7 @@ type AggregatedData = {
   totalDistance: number;
   totalRideTime: number;
   maxSpeed: number;
+  weeklyDistance: number;
 };
 
 export const load: PageServerLoad = async ({ cookies }) => {
@@ -30,7 +31,7 @@ export const load: PageServerLoad = async ({ cookies }) => {
     const athleteRides = activities.filter(({ type }) => type === 'Ride' || type === 'EBikeRide');
     const sortedActivities = sortBy((a) => a.start_date_local, athleteRides);
 
-    const { aggregatedActivities, totalDistance, totalRideTime, maxSpeed } =
+    const { aggregatedActivities, totalDistance, totalRideTime, maxSpeed, weeklyDistance } =
       aggregateData(sortedActivities);
 
     const totalRideDays = uniqBy(
@@ -67,19 +68,24 @@ export const load: PageServerLoad = async ({ cookies }) => {
       profile,
       cumulativeData,
       activityData,
+      weeklyDistance,
     };
   });
 
   const flatData = flatten(pluck('cumulativeData', athleteData));
 
-  const currentDistance = session
-    ? athleteData.find((athlete) => athlete.id === session.id)?.activityData.totalDistance
-    : null;
+  const currentAthleteData: AthleteData | undefined = session
+    ? athleteData.find((athlete) => athlete.id === session.id)
+    : undefined;
+
+  const currentDistance = currentAthleteData?.activityData?.totalDistance;
+  const weeklyDistance = currentAthleteData?.weeklyDistance;
 
   return {
     athleteData,
     flatData,
     currentDistance,
+    weeklyDistance,
   };
 };
 
@@ -131,8 +137,7 @@ const aggregateData = (data: Activity[]): AggregatedData => {
       const { name, start_date, distance, elapsed_time, average_speed, max_speed } = activity;
       const previousDistance = last(acc.aggregatedActivities)?.totalDistance || 0;
 
-      // Convert to whole numbers to avoid floating point errors
-      const totalDistance = (previousDistance * 100 + activity.distance * 100) / 100;
+      const totalDistance = previousDistance + activity.distance;
 
       acc.aggregatedActivities.push({
         name,
@@ -146,6 +151,9 @@ const aggregateData = (data: Activity[]): AggregatedData => {
       acc.totalDistance = totalDistance;
       acc.totalRideTime += elapsed_time;
       acc.maxSpeed = Math.max(acc.maxSpeed, max_speed);
+      if (isSameWeek(start_date, new Date())) {
+        acc.weeklyDistance += activity.distance;
+      }
 
       return acc;
     },
@@ -154,6 +162,7 @@ const aggregateData = (data: Activity[]): AggregatedData => {
       totalDistance: 0,
       totalRideTime: 0,
       maxSpeed: 0,
+      weeklyDistance: 0,
     },
   );
 };
