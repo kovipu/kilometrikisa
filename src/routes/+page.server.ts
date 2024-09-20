@@ -108,7 +108,20 @@ const getActivities = async ({
   const after = startDateTime.getTime() / 1000;
   const before = endDateTime.getTime() / 1000;
   try {
-    return await strava.athlete.listActivities({ access_token, after, before, per_page: 200 });
+    const page1 = await strava.athlete.listActivities({
+      access_token,
+      after,
+      before,
+      per_page: 200,
+    });
+    const page2 = await strava.athlete.listActivities({
+      access_token,
+      after,
+      before,
+      per_page: 200,
+      page: 2,
+    });
+    return page1.concat(page2);
   } catch (error) {
     // Assume access_token is expired and refresh it
     try {
@@ -119,11 +132,20 @@ const getActivities = async ({
         access_token: response.access_token,
         refresh_token: response.refresh_token,
       });
-      return strava.athlete.listActivities({
-        access_token: response.access_token,
+      const page1 = await strava.athlete.listActivities({
+        access_token,
         after,
+        before,
         per_page: 200,
       });
+      const page2 = await strava.athlete.listActivities({
+        access_token,
+        after,
+        before,
+        per_page: 200,
+        page: 2,
+      });
+      return page1.concat(page2);
     } catch (error) {
       console.error('unrecoverable error fetching activities for athlete: ' + firstname, error);
       return [];
